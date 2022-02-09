@@ -10,7 +10,8 @@ namespace Domain
         public Guid Id { get; set; }
         public string LongUrl { get; set; }
         public string ShortUrl { get; set; }
-        public DateTime CreationDate { get; set; }
-        public int Clicks { get; set; }
+        public int Token { get; set; }
+        public DateTime CreationDate { get; set; } = DateTime.Now;
+        public int Clicks { get; set; } = 0;
     }
 }

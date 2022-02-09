@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220207151153_InitialCreate")]
+    [Migration("20220208183131_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace Persistence.Migrations
 
                     b.Property<string>("ShortUrl")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Token")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

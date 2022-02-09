@@ -35,6 +35,9 @@ namespace Persistence.Migrations
                     b.Property<string>("ShortUrl")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Token")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("Shortlinks");

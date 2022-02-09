@@ -16,6 +16,7 @@ namespace Persistence.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     LongUrl = table.Column<string>(type: "TEXT", nullable: true),
                     ShortUrl = table.Column<string>(type: "TEXT", nullable: true),
+                    Token = table.Column<int>(type: "INTEGER", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Clicks = table.Column<int>(type: "INTEGER", nullable: false)
                 },
