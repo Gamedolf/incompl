@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TableRow, TableCell, Link, Tooltip, Typography, IconButton, TextField, Box } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
@@ -13,46 +13,52 @@ const truncate = (str: string) => {
 
 interface Props {
   shortlink: Shortlink;
-  selectShortlink: (id: string) => void;
-  cancelSelectShortlink: () => void;
   createOrEdit: (shortlink: Shortlink) => void;
   deleteShortlink: (id: string) => void;
 }
 
-export default function ShortlinkRow({
-  shortlink,
-  selectShortlink,
-  cancelSelectShortlink,
-  createOrEdit,
-  deleteShortlink,
-}: Props) {
+export default function ShortlinkRow({ shortlink: original, createOrEdit, deleteShortlink }: Props) {
   const [editMode, setEditMode] = useState(false);
-  const [value, setValue] = useState<string>(shortlink.longUrl);
+  const [value, setValue] = useState<string>(original.longUrl);
+
+  const initialState = {
+    id: original.id,
+    shortUrl: original.shortUrl,
+    longUrl: original.longUrl,
+    creationDate: original.creationDate,
+    clicks: original.clicks,
+  };
+
+  const [shortlink, setShortlink] = useState(initialState);
+
+  useEffect(() => {
+    console.log(shortlink);
+  }, [shortlink]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
+    const { name, value } = event.target;
+    setShortlink({ ...shortlink, [name]: value });
   };
 
-  const handleEditMode = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    selectShortlink(shortlink.id);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    createOrEdit(shortlink);
+    setEditMode(false);
+  };
+
+  const handleEdit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
     setEditMode(true);
   };
 
   const handleCancel = () => {
-    cancelSelectShortlink();
+    setValue(original.longUrl);
     setEditMode(false);
   };
 
-  const handleSubmit = () => {
-    console.log(shortlink);
-  };
-
-  const handleSave = () => {
-    handleSubmit();
-    createOrEdit(shortlink);
-    cancelSelectShortlink();
-    setEditMode(false);
+  const handleDelete = (e: React.SyntheticEvent<HTMLButtonElement>, id: string) => {
+    deleteShortlink(id);
   };
 
   return (
@@ -70,6 +76,7 @@ export default function ShortlinkRow({
               size="small"
               value={value}
               onChange={handleChange}
+              name="longUrl"
             />
           </Box>
         </TableCell>
@@ -87,11 +94,11 @@ export default function ShortlinkRow({
       {editMode ? (
         <TableCell align="center">
           <Tooltip title="Save">
-            <IconButton onClick={handleSave} type="submit" form={"form" + shortlink.shortUrl} color="primary">
+            <IconButton onClick={() => handleSubmit} type="submit" form={"form" + shortlink.shortUrl} color="primary">
               <SaveIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Close">
+          <Tooltip title="Cancel">
             <IconButton onClick={handleCancel} color="error">
               <CloseIcon />
             </IconButton>
@@ -99,13 +106,17 @@ export default function ShortlinkRow({
         </TableCell>
       ) : (
         <TableCell align="center">
-          <Tooltip title="Edit destination">
-            <IconButton onClick={(e) => handleEditMode(e)}>
+          <Tooltip title="Edit">
+            <IconButton onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => handleEdit(e)}>
               <EditIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete">
-            <IconButton onClick={() => deleteShortlink(shortlink.id)} color="error">
+            <IconButton
+              name={shortlink.id}
+              onClick={(e: React.SyntheticEvent<HTMLButtonElement, Event>) => handleDelete(e, shortlink.id)}
+              color="error"
+            >
               <DeleteIcon />
             </IconButton>
           </Tooltip>

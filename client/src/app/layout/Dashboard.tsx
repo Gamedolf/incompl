@@ -6,32 +6,15 @@ import ShortlinkList from "./ShortlinkList";
 
 interface Props {
   shortlinks: Shortlink[];
-  selectedShortlink: Shortlink | undefined;
-  selectShortlink: (id: string) => void;
-  cancelSelectShortlink: () => void;
   createOrEdit: (shortlink: Shortlink) => void;
   deleteShortlink: (id: string) => void;
 }
 
-export default function Dashboard({
-  shortlinks,
-  selectedShortlink,
-  selectShortlink,
-  cancelSelectShortlink,
-  createOrEdit,
-  deleteShortlink,
-}: Props) {
+export default function Dashboard({ shortlinks, createOrEdit, deleteShortlink }: Props) {
   return (
     <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
       <ShortlinkForm createOrEdit={createOrEdit} />
-      <ShortlinkList
-        shortlinks={shortlinks}
-        selectedShortlink={selectedShortlink}
-        selectShortlink={selectShortlink}
-        cancelSelectShortlink={cancelSelectShortlink}
-        createOrEdit={createOrEdit}
-        deleteShortlink={deleteShortlink}
-      />
+      <ShortlinkList shortlinks={shortlinks} createOrEdit={createOrEdit} deleteShortlink={deleteShortlink} />
     </Box>
   );
 }

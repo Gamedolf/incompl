@@ -11,8 +11,26 @@ using Application.Shortlinks;
 
 namespace API.Controllers
 {
+    
     public class ShortlinksController : BaseApiController
     {
+        [NonAction]
+        public string GenerateNextURL()
+        {
+            string Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            int Base = Alphabet.Length;
+            int i = new Random().Next(2147000000);
+            var s = string.Empty;
+
+            while (i > 0)
+            {
+                s += Alphabet[i % Base];
+                i = i / Base;
+            }
+            
+            return string.Join(string.Empty, s.Reverse());
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<Shortlink>>> GetShortlinks()
         {
@@ -28,6 +46,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateShortlink(Shortlink shortlink)
         {
+            shortlink.ShortUrl = GenerateNextURL();
             return Ok(await Mediator.Send(new Create.Command { Shortlink = shortlink }));
         }
 

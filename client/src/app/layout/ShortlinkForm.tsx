@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Button, Paper, TextField, Typography } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { Shortlink } from "../models/shortlink";
 
@@ -26,21 +26,27 @@ export default function ShortlinkForm({ createOrEdit }: Props) {
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
     createOrEdit(shortlink);
   };
 
   return (
-    <Box
+    <Paper
       component="form"
       onSubmit={handleSubmit}
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center", my: 2 }}
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 2, my: 2 }}
     >
-      <Typography>Enter a URL to create a new shortlink!</Typography>
-      <TextField value={value} onChange={handleChange} name="longUrl" size="small" placeholder="Paste your link here" />
-      <Button type="submit" variant="contained">
+      <Typography sx={{ my: 1 }}>Enter a URL to create a new shortlink!</Typography>
+      <TextField
+        fullWidth
+        value={value}
+        onChange={handleChange}
+        name="longUrl"
+        size="small"
+        placeholder="Paste your link here"
+      />
+      <Button sx={{ my: 1, width: "100%" }} type="submit" variant="contained">
         Create shortlink!
       </Button>
-    </Box>
+    </Paper>
   );
 }

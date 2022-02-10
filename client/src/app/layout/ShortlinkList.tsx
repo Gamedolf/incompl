@@ -5,20 +5,11 @@ import ShortlinkRow from "./ShortlinkRow";
 
 interface Props {
   shortlinks: Shortlink[];
-  selectedShortlink: Shortlink | undefined;
-  selectShortlink: (id: string) => void;
-  cancelSelectShortlink: () => void;
   createOrEdit: (shortlink: Shortlink) => void;
   deleteShortlink: (id: string) => void;
 }
 
-export default function ShortlinkList({
-  shortlinks,
-  selectShortlink,
-  cancelSelectShortlink,
-  createOrEdit,
-  deleteShortlink,
-}: Props) {
+export default function ShortlinkList({ shortlinks, createOrEdit, deleteShortlink }: Props) {
   const renderTable = (arr: Shortlink[]) => {
     if (arr.length === 0) {
       return <div>Create your first shortlink!</div>;
@@ -36,12 +27,10 @@ export default function ShortlinkList({
               </TableRow>
             </TableHead>
             <TableBody>
-              {shortlinks.map((shortlink) => (
+              {shortlinks.sort().map((shortlink) => (
                 <ShortlinkRow
                   shortlink={shortlink}
                   key={shortlink.id}
-                  selectShortlink={selectShortlink}
-                  cancelSelectShortlink={cancelSelectShortlink}
                   createOrEdit={createOrEdit}
                   deleteShortlink={deleteShortlink}
                 />
